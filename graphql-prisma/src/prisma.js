@@ -6,6 +6,7 @@ const prisma = new Prisma({
 })
 
 export { prisma as default }
+
 /*
 prisma.exists
   .Comment({ id: 'ck4a0s2e701gq080280w4swoq' })

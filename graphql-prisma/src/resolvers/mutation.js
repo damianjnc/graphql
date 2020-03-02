@@ -24,7 +24,7 @@ const mutation = {
   },
   async updateUser(parent, args, { prisma }, info) {
     return prisma.mutation.updateUser(
-      { where: { id: args.id }, data: args.input },
+      { where: { id: args.id }, data: args.data },
       info
     )
   },
@@ -32,8 +32,8 @@ const mutation = {
     return prisma.mutation.createPost(
       {
         data: {
-          ...args.input,
-          author: { connect: { id: args.input.id } }
+          ...args.data,
+          author: { connect: { id: args.data.author } }
         }
       },
       info
@@ -95,10 +95,10 @@ const mutation = {
     //
     //  */
   },
-  updatePost(parent, { id, input }, { prisma }, info) {
+  updatePost(parent, { id, data }, { prisma }, info) {
     return prisma.mutation.updatePost(
       {
-        data: input,
+        data: data,
         where: { id: id }
       },
       info
@@ -144,15 +144,15 @@ const mutation = {
     return prisma.mutation.createComment(
       {
         data: {
-          ...args.input,
+          ...args.data,
           author: {
             connect: {
-              id: args.input.author
+              id: args.data.author
             }
           },
           post: {
             connect: {
-              id: args.input.post
+              id: args.data.post
             }
           }
         }
@@ -190,9 +190,8 @@ const mutation = {
   updateComment(parent, args, { prisma }, info) {
     return prisma.mutation.updateComment(
       {
-        ...args.input,
-        author: { connect: { id: args.input.id } },
-        post: { connect: { id: args.input.id } }
+        data: args.data,
+        where: { id: args.id }
       },
       info
     )

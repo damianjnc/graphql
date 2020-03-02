@@ -1,41 +1,35 @@
 type Query {
+  users(query: String): [User!]!
+  posts(query: String): [Post!]!
+  comments: [Comment!]!
   me: User!
   post: Post!
-  posts(query: String): [Post!]!
-  users(query: String): [User!]!
-  comments: [Comment!]!
 }
 
 type Mutation {
-  createUser(data: UserCreateInput!): User!
+  createUser(data: CreateUserInput!): User!
   deleteUser(id: ID!): User!
-  updateUser(id: ID!, input: UpdateUserInput!): User!
-  createComment(input: CreateCommentInput!): Comment!
-  deleteComment(id: ID!): Comment!
-  createPost(input: CreatePostInput!): Post!
-  updatePost(id: ID!, input: UpdatePostInput!): Post!
+  updateUser(id: ID!, data: UpdateUserInput!): User!
+  createPost(data: CreatePostInput!): Post!
   deletePost(id: ID!): Post!
-  updateComment(id: ID!, input: UpdateCommentInput!): Comment!
+  updatePost(id: ID!, data: UpdatePostInput!): Post!
+  createComment(data: CreateCommentInput!): Comment!
+  deleteComment(id: ID!): Comment!
+  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
 }
 
 type Subscription {
-  count: Int!
   comment(postId: ID!): CommentSubscriptionPayload!
   post: PostSubscriptionPayload!
 }
 
-input CreateCommentInput {
-  text: String!
-  author: ID!
-  post: ID!
-}
-
-input UpdateCommentInput {
-  text: String
+input CreateUserInput {
+  name: String!
+  email: String!
 }
 
 input UpdateUserInput {
-  name: String,
+  name: String
   email: String
 }
 
@@ -52,15 +46,21 @@ input UpdatePostInput {
   published: Boolean
 }
 
-input UserCreateInput {
-  name: String!
-  email: String!
+input CreateCommentInput {
+  text: String!
+  author: ID!
+  post: ID!
+}
+
+input UpdateCommentInput {
+  text: String
 }
 
 type User {
   id: ID!
   name: String!
   email: String!
+  password: String!
   posts: [Post!]!
   comments: [Comment!]!
 }
@@ -89,10 +89,10 @@ enum MutationType {
 
 type PostSubscriptionPayload {
   mutation: MutationType!
-  data: Post!
+  node: Post
 }
 
 type CommentSubscriptionPayload {
   mutation: MutationType!
-  data: Comment!
+  node: Comment
 }
